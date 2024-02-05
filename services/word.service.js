@@ -48,7 +48,34 @@ exports.getWordsList = async function (query = {}, currentUserId) {
     $and: [
       query.pos ? { partOfSpeech: query.pos } : {},
       query.search
-        ? { $or: [{ word: regex }, { plainWord: regex }, { translations: { $elemMatch: regex } }] }
+        ? {
+            $or: [
+              { word: regex },
+              { plainWord: regex },
+              { translations: { $elemMatch: regex } },
+              { 'nounDeclension.n': { $elemMatch: regex } },
+              { 'nounDeclension.g': { $elemMatch: regex } },
+              { 'nounDeclension.a': { $elemMatch: regex } },
+              { 'nounDeclension.d': { $elemMatch: regex } },
+              { 'nounDeclension.i': { $elemMatch: regex } },
+              { 'nounDeclension.p': { $elemMatch: regex } },
+              { 'shortForms.m': regex },
+              { 'shortForms.f': regex },
+              { 'shortForms.n': regex },
+              { 'shortForms.p': regex },
+              { 'degrees.comparative': regex },
+              { 'degrees.superlative': regex },
+              { 'verbConjugation.past.m': regex },
+              { 'verbConjugation.past.f': regex },
+              { 'verbConjugation.past.n': regex },
+              { 'verbConjugation.past.p': regex },
+              { 'verbConjugation.present.fps': regex },
+              { 'verbConjugation.present.sps': regex },
+              { 'verbConjugation.present.tpp': regex },
+              { 'imperativeMood.s': regex },
+              { 'imperativeMood.p': regex },
+            ],
+          }
         : {},
       packet === 'knows'
         ? { knows: { $in: [user._id] } }
