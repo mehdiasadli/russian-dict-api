@@ -33,7 +33,15 @@ exports.deleteUser = async function (id) {
     throw new HttpError('User not found', 404);
   }
 
+  const words = await Word.find({ knows: id });
+
+  words?.forEach(async (w) => {
+    w.knows = w.knows.filter((k) => k.toString() !== id);
+    await w.save();
+  });
+
   await User.findByIdAndDelete(id);
+
   return true;
 };
 
